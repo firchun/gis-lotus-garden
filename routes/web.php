@@ -56,12 +56,6 @@ Route::middleware(['auth:web'])->group(function () {
     //akun managemen
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    //customers managemen
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
-    Route::post('/customers/store',  [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/customers/edit/{id}',  [CustomerController::class, 'edit'])->name('customers.edit');
-    Route::delete('/customers/delete/{id}',  [CustomerController::class, 'destroy'])->name('customers.delete');
-    Route::get('/customers-datatable', [CustomerController::class, 'getCustomersDataTable']);
 });
 Route::middleware(['auth:web', 'role:Admin'])->group(function () {
     //fasilitas
@@ -73,7 +67,6 @@ Route::middleware(['auth:web', 'role:Admin'])->group(function () {
     //tiket
     Route::get('/tiket', [TiketController::class, 'index'])->name('tiket');
     Route::get('/update-tiket', [TiketController::class, 'update_tiket'])->name('update-tiket');
-    Route::post('/tiket/store',  [TiketController::class, 'store'])->name('tiket.store');
     Route::post('/tiket/update',  [TiketController::class, 'update'])->name('tiket.update');
     Route::get('/tiket/get-one/{barcode}',  [TiketController::class, 'getOne'])->name('tiket.get-one');
     Route::get('/tiket-datatable', [TiketController::class, 'getTiketDataTable']);
