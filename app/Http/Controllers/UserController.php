@@ -24,12 +24,10 @@ class UserController extends Controller
     }
     public function getUsersDataTable()
     {
-        $users = User::select(['id', 'name', 'email', 'created_at', 'updated_at', 'role', 'avatar'])->orderByDesc('id');
+        $users = User::select(['id', 'name', 'email', 'created_at', 'updated_at', 'role'])->orderByDesc('id');
 
         return Datatables::of($users)
-            ->addColumn('avatar', function ($user) {
-                return view('admin.users.components.avatar', compact('user'));
-            })
+
             ->addColumn('action', function ($user) {
                 return view('admin.users.components.actions', compact('user'));
             })
@@ -37,7 +35,7 @@ class UserController extends Controller
                 return '<span class="badge bg-label-primary">' . $user->role . '</span>';
             })
 
-            ->rawColumns(['action', 'role', 'avatar'])
+            ->rawColumns(['action', 'role'])
             ->make(true);
     }
     public function store(Request $request)

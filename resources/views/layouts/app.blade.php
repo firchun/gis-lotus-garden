@@ -1,86 +1,131 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+
+
+<html lang="en-us">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title }} - {{ env('APP_NAME') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <meta name="description" content="This is meta description">
+    <meta name="author" content="Themefisher">
+    <link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/xs-icon">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- # Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Neuton:wght@700&family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- # CSS Plugins -->
+    {{-- <link rel="stylesheet" href="{{ asset('frontend_theme/') }}/plugins/bootstrap/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- # Main Style Sheet -->
+    <link rel="stylesheet" href="{{ asset('frontend_theme/') }}/css/style.css">
+    @stack('css')
+    <style>
+        .leaflet-popup-content-wrapper {
+            width: 250px;
+            /* Adjust width as needed */
+            max-height: 300px;
+            /* Adjust max height as needed */
+            overflow: auto;
+            /* Enable scrolling if content exceeds max height */
+        }
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        .leaflet-popup-content img {
+            max-width: 90%;
+            /* Ensure images fit within popup */
+            height: auto;
+        }
+
+        .leaflet-popup-tip {
+            display: none;
+            /* Hide the popup tip if you prefer */
+        }
+    </style>
+
 </head>
 
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+    <header class="navigation">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light px-0">
+                <a class="navbar-brand order-1 py-0" href="index.html">
+                    <img loading="prelaod" decoding="async" class="img-fluid" src="{{ asset('img/logo.png') }}"
+                        alt="Reporter Hugo" style="height: 80px;">
+                </a>
+                <div class="navbar-actions order-3 ml-0 ml-md-4">
+                    <button aria-label="navbar toggler" class="navbar-toggler border-0" type="button"
+                        data-toggle="collapse" data-target="#navigation"> <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <form action="#!" class="search order-lg-3 order-md-2 order-3 ml-auto">
+                    <input id="search-query" name="s" type="search" placeholder="Search..." autocomplete="off">
+                </form>
+                <div class="collapse navbar-collapse text-center order-lg-2 order-4" id="navigation">
+                    <ul class="navbar-nav mx-auto mt-3 mt-lg-0">
+                        <li class="nav-item"> <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link" href="{{ url('/maps') }}">Maps</a>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link" href="{{ url('/about') }}">About</a>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link" href="{{ url('/check-tiket') }}">Tiket</a>
+                        </li>
 
                     </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
+    <main>
+        @yield('content')
+    </main>
+
+    <footer class="bg-dark mt-5">
+        <div class="container section">
+            <div class="row">
+                <div class="col-lg-10 mx-auto text-center">
+                    <a class="d-inline-block mb-4 pb-2" href="index.html">
+                        <img loading="prelaod" decoding="async" class="img-fluid" src="{{ asset('img/logo.png') }}"
+                            alt="Reporter Hugo" style="height:100px;">
+                    </a>
+                    <ul class="p-0 d-flex navbar-footer mb-0 list-unstyled">
+                        <li class="nav-item my-0"> <a class="nav-link" href="{{ url('/') }}">Home</a></li>
+                        <li class="nav-item my-0"> <a class="nav-link" href="{{ url('/maps') }}">Maps</a></li>
+                        <li class="nav-item my-0"> <a class="nav-link" href="{{ url('/about') }}">About</a>
+                        </li>
+                        <li class="nav-item my-0"> <a class="nav-link" href="{{ url('/check-tiket') }}">Check TIket</a>
+                        </li>
                         @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
+                            <li class="nav-item my-0"> <a class="nav-link" href="{{ route('login') }}">Login</a></li>
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
+                            <li class="nav-item my-0"> <a class="nav-link" href="{{ route('home') }}">Dashboard</a></li>
                         @endguest
                     </ul>
                 </div>
             </div>
-        </nav>
+        </div>
+        <div class="copyright bg-dark content">Designed &amp; Developed By <a
+                href="{{ url('/') }}">{{ env('APP_NAME') }}</a></div>
+    </footer>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+
+    <!-- # JS Plugins -->
+    <script src="{{ asset('frontend_theme/') }}/plugins/jquery/jquery.min.js"></script>
+    <script src="{{ asset('frontend_theme/') }}/plugins/bootstrap/bootstrap.min.js"></script>
+
+    <!-- Main Script -->
+    <script src={{ asset('frontend_theme/') }}/js/script.js"></script>
+    @stack('js')
+
 </body>
 
 </html>

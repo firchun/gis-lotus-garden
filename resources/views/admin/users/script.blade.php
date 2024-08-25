@@ -3,17 +3,14 @@
         $(function() {
             $('#datatable-users').DataTable({
                 processing: true,
-                serverSide: true,
-                responsive: true,
+                serverSide: false,
+                responsive: false,
                 ajax: '{{ url('users-datatable') }}',
                 columns: [{
                         data: 'id',
                         name: 'id'
                     },
-                    {
-                        data: 'avatar',
-                        name: 'avatar'
-                    },
+
                     {
                         data: 'name',
                         name: 'name'

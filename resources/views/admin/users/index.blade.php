@@ -29,7 +29,6 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Avatar</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -40,7 +39,6 @@
                     <tfoot>
                         <tr>
                             <th>ID</th>
-                            <th>Avatar</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>

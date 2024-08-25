@@ -28,7 +28,6 @@ class HomeController extends Controller
         $data = [
             'title' => 'Dashboard',
             'users' => User::count(),
-            'customers' => Customer::count()
         ];
         return view('admin.dashboard', $data);
     }
