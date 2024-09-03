@@ -176,7 +176,7 @@
 
             <tr>
                 <th>Jumlah Pengunjung</th>
-                <td>{{ $tiket->jumlah }} Pengunjung</td>
+                <td>Dewasa : {{ $tiket->jumlah_dewasa }}<br> Anak-anak : {{ $tiket->jumlah_anak }}</td>
             </tr>
             <tr>
                 <th>Tanggal Kunjungan</th>

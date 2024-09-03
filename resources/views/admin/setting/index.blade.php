@@ -51,7 +51,16 @@
             <div class="col-lg-6 col-md-4">
                 <div class="card-box">
                     <div class="card-body">
-                        <input type="text" class="form-control" name="harga_tiket" value="{{ $setting->harga_tiket }}">
+                        <div class="mb-3">
+                            <label>Tiket Dewasa</label>
+                            <input type="text" class="form-control" name="harga_tiket"
+                                value="{{ $setting->harga_tiket }}">
+                        </div>
+                        <div class="mb-3">
+                            <label>Tiket Anak-anak</label>
+                            <input type="text" class="form-control" name="harga_tiket_anak"
+                                value="{{ $setting->harga_tiket_anak }}">
+                        </div>
                     </div>
                 </div>
             </div>

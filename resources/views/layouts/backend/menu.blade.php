@@ -131,6 +131,19 @@
                 </li>
                 <li class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle">
+                        <span class="micon bi bi-folder"></span><span class="mtext">Laporan</span>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="{{ route('laporan.tiket') }}"
+                                class="{{ request()->is('laporan/tiket') ? 'active' : '' }}">Laporan Tiket</a></li>
+                        <li><a href="{{ route('laporan.keuangan') }}"
+                                class="{{ request()->is('laporan/keuangan') ? 'active' : '' }}">Laporan Keuangan</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle">
                         <span class="micon bi bi-people"></span><span class="mtext">Pengguna</span>
                     </a>
                     <ul class="submenu">

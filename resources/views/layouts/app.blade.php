@@ -56,7 +56,7 @@
     <header class="navigation">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light px-0">
-                <a class="navbar-brand order-1 py-0" href="index.html">
+                <a class="navbar-brand order-1 py-0" href="{{ url('/') }}">
                     <img loading="prelaod" decoding="async" class="img-fluid" src="{{ asset('img/logo.png') }}"
                         alt="Reporter Hugo" style="height: 80px;">
                 </a>
@@ -93,7 +93,7 @@
         <div class="container section">
             <div class="row">
                 <div class="col-lg-10 mx-auto text-center">
-                    <a class="d-inline-block mb-4 pb-2" href="index.html">
+                    <a class="d-inline-block mb-4 pb-2" href="{{ url('/') }}">
                         <img loading="prelaod" decoding="async" class="img-fluid" src="{{ asset('img/logo.png') }}"
                             alt="Reporter Hugo" style="height:100px;">
                     </a>

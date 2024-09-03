@@ -30,9 +30,18 @@
                                 value="+62" required>
                         </div>
                         <div class="mb-3">
-                            <label>Jumlah Pengunjung <span class="text-danger">*</span></label>
-                            <input type="number" id="jumlah-pengunjung" name="jumlah" class="form-control" min="1"
-                                value="1" required>
+                            <label>Jumlah Pengunjung Dewasa <b class="text-primary">(Rp
+                                    {{ number_format($setting->harga_tiket) }})</b><span
+                                    class="text-danger">*</span></label>
+                            <input type="number" id="jumlah-pengunjung" name="jumlah_dewasa" class="form-control"
+                                min="1" value="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Jumlah Pengunjung Anak-anak <b class="text-primary">(Rp
+                                    {{ number_format($setting->harga_tiket_anak) }})</b><span
+                                    class="text-danger">*</span></label>
+                            <input type="number" id="jumlah-pengunjung-anak" name="jumlah_anak" class="form-control"
+                                min="0" value="0" required>
                         </div>
                         <div class="mb-3">
                             <label>Tanggal Kunjungan</label>
@@ -55,18 +64,22 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const hargaTiket = {{ $setting->harga_tiket }};
+                const hargaTiketAnak = {{ $setting->harga_tiket_anak }};
                 const jumlahInput = document.getElementById('jumlah-pengunjung');
+                const jumlahInputAnak = document.getElementById('jumlah-pengunjung-anak');
                 const totalHargaElement = document.getElementById('total-harga');
                 const totalHargaInput = document.getElementById('input-total-harga');
 
                 function updateTotal() {
                     const jumlah = parseInt(jumlahInput.value, 10);
-                    const total = hargaTiket * jumlah;
+                    const jumlahAnak = parseInt(jumlahInputAnak.value, 10);
+                    const total = (hargaTiket * jumlah) + (hargaTiketAnak * jumlahAnak);
                     totalHargaElement.textContent = total.toLocaleString('id-ID');
                     totalHargaInput.value = total;
                 }
 
                 jumlahInput.addEventListener('input', updateTotal);
+                jumlahInputAnak.addEventListener('input', updateTotal);
 
                 // Initial calculation
                 updateTotal();

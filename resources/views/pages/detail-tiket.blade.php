@@ -31,7 +31,7 @@
                             </tr>
                             <tr>
                                 <td>Jumlah Pengunjung</td>
-                                <td>{{ $tiket->jumlah }} Pengunjung</td>
+                                <td>Dewasa : {{ $tiket->jumlah_dewasa }}<br> Anak-anak : {{ $tiket->jumlah_anak }}</td>
                             </tr>
                             <tr>
                                 <td>Tanggal Kunjungan</td>

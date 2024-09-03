@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FasilitasController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TiketController;
@@ -67,9 +68,16 @@ Route::middleware(['auth:web', 'role:Admin'])->group(function () {
     //tiket
     Route::get('/tiket', [TiketController::class, 'index'])->name('tiket');
     Route::get('/update-tiket', [TiketController::class, 'update_tiket'])->name('update-tiket');
+    Route::delete('/tiket/delete/{id}', [TiketController::class, 'destroy'])->name('tiket.delete');
     Route::post('/tiket/update',  [TiketController::class, 'update'])->name('tiket.update');
     Route::get('/tiket/get-one/{barcode}',  [TiketController::class, 'getOne'])->name('tiket.get-one');
     Route::get('/tiket-datatable', [TiketController::class, 'getTiketDataTable']);
+    Route::get('/pembayaran-datatable', [TiketController::class, 'getPembayaranDataTable']);
+    //laporan managemen
+    Route::get('/laporan/tiket', [LaporanController::class, 'tiket'])->name('laporan.tiket');
+    Route::get('/laporan/keuangan', [LaporanController::class, 'keuangan'])->name('laporan.keuangan');
+    Route::get('/laporan/print-tiket', [LaporanController::class, 'print_tiket'])->name('laporan.print-tiket');
+    Route::get('/laporan/print-keuangan', [LaporanController::class, 'print_keuangan'])->name('laporan.print-keuangan');
     //user managemen
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::post('/users/store',  [UserController::class, 'store'])->name('users.store');

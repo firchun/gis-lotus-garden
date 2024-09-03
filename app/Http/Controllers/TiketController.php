@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
 class TiketController extends Controller
@@ -93,9 +94,12 @@ class TiketController extends Controller
     }
     public function index()
     {
+
         $data = [
             'title' => 'Data Tiket',
-
+            'tiket_pending' => Tiket::where('status', 'Pending')->count(),
+            'tiket_terpakai' => Tiket::where('status', 'Terpakai')->count(),
+            'pendapatan' => Tiket::where('status', 'Terpakai')->sum('total_harga'),
         ];
         return view('admin.tiket.index', $data);
     }
@@ -136,15 +140,51 @@ class TiketController extends Controller
         $barcode = $request->input('barcode');
         $tiket = Tiket::where('barcode', $barcode)->first();
         $tiket->status = 'Terpakai';
-        $tiket->jumlah = $request->input('jumlah');
+        $tiket->jumlah_dewasa = $request->input('jumlah_dewasa');
+        $tiket->jumlah_anak = $request->input('jumlah_anak');
         $tiket->save();
 
         return back()->with('success', 'Tiket : ' . $barcode . ' Berhasil diupdate');
     }
-    public function getTiketDataTable()
+    public function getTiketDataTable(Request $request)
     {
         $tiket = Tiket::orderByDesc('id');
+        if ($request->input('status') != '' && $request->has('status')) {
+            $tiket = $tiket->where('status', $request->input('status'));
+        }
+        if ($request->has('from_date') && $request->from_date) {
+            $startDate = Carbon::parse($request->from_date)->startOfDay();
+            $tiket->where('created_at', '>=', $startDate);
+        }
 
+        if ($request->has('to_date') && $request->to_date) {
+            $endDate = Carbon::parse($request->to_date)->endOfDay();
+            $tiket->where('created_at', '<=', $endDate);
+        }
+        return DataTables::of($tiket)
+
+            ->addColumn('created', function ($tiket) {
+                return $tiket->created_at->format('d/m/Y');
+            })
+            ->addColumn('action', function ($tiket) {
+                return  '<button class="btn btn-sm btn-danger " onclick="deleteTiket(' . $tiket->id . ')">Delete</button>';
+            })
+            ->rawColumns(['created', 'action'])
+            ->make(true);
+    }
+    public function getPembayaranDataTable(Request $request)
+    {
+        $tiket = Tiket::where('status', 'Terpakai')->orderByDesc('id');
+
+        if ($request->has('from_date') && $request->from_date) {
+            $startDate = Carbon::parse($request->from_date)->startOfDay();
+            $tiket->where('created_at', '>=', $startDate);
+        }
+
+        if ($request->has('to_date') && $request->to_date) {
+            $endDate = Carbon::parse($request->to_date)->endOfDay();
+            $tiket->where('created_at', '<=', $endDate);
+        }
         return DataTables::of($tiket)
 
             ->addColumn('created', function ($tiket) {
@@ -152,5 +192,17 @@ class TiketController extends Controller
             })
             ->rawColumns(['created'])
             ->make(true);
+    }
+    public function destroy($id)
+    {
+        $tiket = Tiket::find($id);
+
+        if (!$tiket) {
+            return response()->json(['message' => 'Tiket not found'], 404);
+        }
+
+        $tiket->delete();
+
+        return response()->json(['message' => 'Tiket deleted successfully']);
     }
 }

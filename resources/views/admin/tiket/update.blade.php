@@ -48,9 +48,14 @@
                             @csrf
                             <input type="hidden" id="updateBarcode" name="barcode">
                             <div class="form-group">
-                                <label for="updateJumlah">Jumlah Pengunjung</label>
-                                <input type="number" id="updateJumlah" name="jumlah" class="form-control" min="1"
-                                    required>
+                                <label for="updateJumlah">Jumlah Pengunjung Dewasa</label>
+                                <input type="number" id="updateJumlah" name="jumlah_dewasa" class="form-control"
+                                    min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateJumlah">Jumlah Pengunjung Anak-anak</label>
+                                <input type="number" id="updateJumlahAnak" name="jumlah_anak" class="form-control"
+                                    min="0" required>
                             </div>
                             <div class="form-group">
                                 <label for="total_harga">Total Harga</label>

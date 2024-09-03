@@ -31,6 +31,9 @@ class SettingController extends Controller
         if ($request->has('harga_tiket')) {
             $setting->harga_tiket = $request->input('harga_tiket');
         }
+        if ($request->has('harga_tiket_anak')) {
+            $setting->harga_tiket_anak = $request->input('harga_tiket_anak');
+        }
         $setting->save();
         return back()->with('success', 'Berhasil memperbaharui pengaturan website');
     }

@@ -13,39 +13,73 @@
 
         </div>
     </div>
+    <div class="my-3">
+        <div class="row">
+            @include('admin.dashboard_component.card1', [
+                'count' => $tiket_pending,
+                'title' => 'Tiket Pending',
+                'subtitle' => 'Total Pemesanan Tiket Pending',
+                'color' => 'warning',
+                'icon' => 'ticket',
+            ])
+            @include('admin.dashboard_component.card1', [
+                'count' => $tiket_terpakai,
+                'title' => 'Tiket Terpakai',
+                'subtitle' => 'Total Pemesanan Tiket Terpakai',
+                'color' => 'success',
+                'icon' => 'ticket',
+            ])
+            @include('admin.dashboard_component.card1', [
+                'count' => $pendapatan,
+                'title' => 'Pendapatan',
+                'subtitle' => 'Total Pendapatan Tiket',
+                'color' => 'danger',
+                'icon' => 'money',
+            ])
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card-box mb-30">
                 <div class="card-body">
                     <h2>{{ $title }}</h2>
                 </div>
-                <table id="datatable-tiket" class="table table-h0ver  display mb-3">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tanggal</th>
-                            <th>Kunjungan</th>
-                            <th>Nama</th>
-                            <th>No. HP/WA</th>
-                            <th>Pengunjung</th>
-                            <th>Harga</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
+                <div class="table-responsive">
 
-                    <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tanggal</th>
-                            <th>Kunjungan</th>
-                            <th>Nama</th>
-                            <th>No. HP/WA</th>
-                            <th>Pengunjung</th>
-                            <th>Harga</th>
-                            <th>Status</th>
-                        </tr>
-                    </tfoot>
-                </table>
+                    <table id="datatable-tiket" class="table table-h0ver  display mb-3">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tanggal</th>
+                                <th>Kunjungan</th>
+                                <th>code</th>
+                                <th>Nama</th>
+                                <th>No. HP/WA</th>
+                                <th>Dewasa</th>
+                                <th>Anak-anak</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tanggal</th>
+                                <th>Kunjungan</th>
+                                <th>code</th>
+                                <th>Nama</th>
+                                <th>No. HP/WA</th>
+                                <th>Dewasa</th>
+                                <th>Anak-anak</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

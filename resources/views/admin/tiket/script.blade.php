@@ -21,6 +21,10 @@
                     },
 
                     {
+                        data: 'barcode',
+                        name: 'barcode'
+                    },
+                    {
                         data: 'nama',
                         name: 'nama'
                     },
@@ -29,8 +33,12 @@
                         name: 'no_hp'
                     },
                     {
-                        data: 'jumlah',
-                        name: 'jumlah'
+                        data: 'jumlah_dewasa',
+                        name: 'jumlah_dewasa'
+                    },
+                    {
+                        data: 'jumlah_anak',
+                        name: 'jumlah_anak'
                     },
                     {
                         data: 'total_harga',
@@ -40,12 +48,33 @@
                         data: 'status',
                         name: 'status'
                     },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
                 ]
             });
             $('.refresh').click(function() {
                 $('#datatable-tiket').DataTable().ajax.reload();
             });
-
+            window.deleteTiket = function(id) {
+                if (confirm('Apakah Anda yakin ingin menghapus tiket ini?')) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/tiket/delete/' + id,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            // alert(response.message);
+                            $('#datatable-tiket').DataTable().ajax.reload();
+                        },
+                        error: function(xhr) {
+                            alert('Terjadi kesalahan: ' + xhr.responseText);
+                        }
+                    });
+                }
+            };
 
         });
     </script>
