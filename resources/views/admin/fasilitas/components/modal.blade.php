@@ -31,7 +31,7 @@
                             </div>
                             <div class="mb-3" id="edit-biaya-container">
                                 <label for="edit-biaya" class="form-label">Biaya Tiket Fasilitas</label>
-                                <input type="number" class="form-control" id="edit-biaya" name="biaya">
+                                <input type="number" class="form-control" id="edit-biaya" name="harga">
                             </div>
                             <div class="mb-3">
                                 <label for="edit-keterangan" class="form-label">Keterangan Fasilitas</label>
@@ -97,7 +97,7 @@
                             </div>
                             <div class="mb-3" id="biaya-container">
                                 <label for="biaya" class="form-label">Biaya Tiket Fasilitas</label>
-                                <input type="number" class="form-control" id="biaya" name="biaya">
+                                <input type="number" class="form-control" id="biaya" name="harga">
                             </div>
                             <div class="mb-3">
                                 <label for="keterangan" class="form-label">Keterangan Fasilitas</label>

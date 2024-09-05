@@ -53,13 +53,27 @@
                                     min="1" required>
                             </div>
                             <div class="form-group">
-                                <label for="updateJumlah">Jumlah Pengunjung Anak-anak</label>
+                                <label for="updateJumlahAnak">Jumlah Pengunjung Anak-anak</label>
                                 <input type="number" id="updateJumlahAnak" name="jumlah_anak" class="form-control"
                                     min="0" required>
                             </div>
+                            <hr>
+                            <strong class="mb-3">Tambah Fasilitas</strong>
+                            @foreach ($fasilitas as $item)
+                                <div class="border p-2 shadow-sm rounded">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="id_fasilitas[]"
+                                            value="{{ $item->id }}" id="fasilitas-{{ $item->id }}">
+                                        <label class="form-check-label" for="defaultCheck1">
+                                            {{ $item->nama }} - Rp {{ number_format($item->harga) }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                            <hr>
                             <div class="form-group">
                                 <label for="total_harga">Total Harga</label>
-                                <input type="text" id="total_harga" class="form-control" readonly>
+                                <input type="text" id="total_harga" class="form-control" name="total_harga" readonly>
                             </div>
                             <button type="submit" id="btnSave" class="btn btn-lg btn-success btn-block">Simpan</button>
                         </form>
@@ -198,6 +212,7 @@
             });
 
             var hargaTiket = {{ $harga_tiket }}; // Pass the ticket price to the script
+            var hargaTiketAnak = {{ $harga_tiket_anak }}; // Pass the ticket price to the script
 
             $('#btnUpdate').click(function() {
                 $('#scanner').hide();
@@ -230,9 +245,11 @@
 
                             // Populate the form
                             $('#updateBarcode').val(data.barcode);
-                            $('#updateJumlah').val(data.jumlah);
-                            $('#total_harga').val((data.jumlah *
-                                hargaTiket)); // Initial total price
+                            $('#updateJumlah').val(data.jumlah_dewasa);
+                            $('#updateJumlahAnak').val(data.jumlah_anak);
+                            $('#total_harga').val(((data.jumlah_dewasa *
+                                hargaTiket) + (data.jumlah_anak *
+                                hargaTiketAnak))); // Initial total price
 
                             // Show the update form
                             $('#updateForm').show();
@@ -252,17 +269,72 @@
             });
 
             // Update total price when quantity changes
-            $('#updateJumlah').on('input', function() {
-                var jumlah = $(this).val();
-                if (jumlah) {
-                    var totalHarga = jumlah * hargaTiket;
+            // $('#updateJumlah, #updateJumlahAnak').on('input', function() {
+            //     var jumlahDewasa = $('#updateJumlah').val();
+            //     var jumlahAnak = $('#updateJumlahAnak').val();
+
+
+            //     var totalHargaDewasa = jumlahDewasa ? jumlahDewasa * hargaTiket : 0;
+            //     var totalHargaAnak = jumlahAnak ? jumlahAnak * hargaTiketAnak : 0;
+
+            //     var totalHarga = totalHargaDewasa + totalHargaAnak;
+
+            //     $('#total_harga').val(totalHarga);
+            //     $('#total_harga_display').text('Rp ' + totalHarga);
+            // });
+            // Update total price when quantity changes or facilities are selected/deselected
+            $('#updateJumlah, #updateJumlahAnak, .form-check-input').on('input change', function() {
+                var jumlahDewasa = $('#updateJumlah').val();
+                var jumlahAnak = $('#updateJumlahAnak').val();
+
+                // Calculate total price for tickets
+                var totalHargaDewasa = jumlahDewasa ? jumlahDewasa * hargaTiket : 0;
+                var totalHargaAnak = jumlahAnak ? jumlahAnak * hargaTiketAnak : 0;
+
+                // Calculate total price for selected facilities
+                var totalHargaFasilitas = 0;
+                var fasilitasRequests = [];
+                // $('.form-check-input:checked').each(function() {
+                //     totalHargaFasilitas += parseFloat($(this).val());
+                // });
+                $('.form-check-input:checked').each(function() {
+                    var facilityId = $(this).val();
+                    if (facilityId) {
+                        fasilitasRequests.push(
+                            $.ajax({
+                                url: '/fasilitas/edit/' + facilityId,
+                                method: 'GET',
+                                dataType: 'json'
+                            })
+                        );
+                    }
+                });
+                $.when.apply($, fasilitasRequests).done(function() {
+                    // Convert arguments object to an array
+                    var responses = Array.prototype.slice.call(arguments);
+
+                    responses.forEach(function(response) {
+                        var data = response; // The data returned from the AJAX request
+                        // console.log(data);
+                        totalHargaFasilitas += parseFloat(data.harga) || 0;
+                    });
+
+
+                    // Calculate total price
+                    var totalHarga = totalHargaDewasa + totalHargaAnak + totalHargaFasilitas;
+
+                    // Update display
                     $('#total_harga').val(totalHarga);
-                    $('#total_harga_display').text('Rp ' + totalHarga);
-                } else {
-                    $('#total_harga').val('Rp 0.00');
-                    $('#total_harga_display').text('Rp 0.00');
-                }
+                    $('#total_harga_display').text('Rp ' + totalHarga.toLocaleString());
+                });
+                // // Calculate total price
+                // var totalHarga = totalHargaDewasa + totalHargaAnak + totalHargaFasilitas;
+
+                // // Update display
+                // $('#total_harga').val(totalHarga);
+                // $('#total_harga_display').text('Rp ' + totalHarga);
             });
+
         });
     </script>
 @endpush

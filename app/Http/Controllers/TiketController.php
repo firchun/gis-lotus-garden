@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fasilitas;
 use App\Models\Setting;
 use App\Models\Tiket;
+use App\Models\TiketItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -48,7 +50,8 @@ class TiketController extends Controller
             $tiket->keterangan = $request->input('keterangan') ?: '-';
             $tiket->tanggal = $request->input('tanggal');
             $tiket->total_harga = $request->input('total_harga');;
-            $tiket->jumlah = $request->input('jumlah');
+            $tiket->jumlah_dewasa = $request->input('jumlah_dewasa');
+            $tiket->jumlah_anak = $request->input('jumlah_anak');
             $tiket->barcode = $barcode;
             $tiket->save();
 
@@ -108,6 +111,8 @@ class TiketController extends Controller
         $data = [
             'title' => 'Update Tiket',
             'harga_tiket' => Setting::latest()->first()->harga_tiket,
+            'harga_tiket_anak' => Setting::latest()->first()->harga_tiket_anak,
+            'fasilitas' => Fasilitas::where('type', 'Berbayar')->get(),
 
         ];
         return view('admin.tiket.update', $data);
@@ -140,9 +145,23 @@ class TiketController extends Controller
         $barcode = $request->input('barcode');
         $tiket = Tiket::where('barcode', $barcode)->first();
         $tiket->status = 'Terpakai';
+        $tiket->total_harga = $request->input('total_harga');
         $tiket->jumlah_dewasa = $request->input('jumlah_dewasa');
         $tiket->jumlah_anak = $request->input('jumlah_anak');
         $tiket->save();
+
+        // tambah ke tiket items
+        $selectedFasilitasIds = $request->input('id_fasilitas', []);
+
+        foreach ($selectedFasilitasIds as $id) {
+
+            $items = new TiketItems();
+            $items->id_fasilitas = $id;
+            $items->id_tiket  = $tiket->id;
+            $items->jumlah = 1;
+            $items->save();
+        }
+
 
         return back()->with('success', 'Tiket : ' . $barcode . ' Berhasil diupdate');
     }
@@ -166,10 +185,21 @@ class TiketController extends Controller
             ->addColumn('created', function ($tiket) {
                 return $tiket->created_at->format('d/m/Y');
             })
+            ->addColumn('fasilitas_list', function ($tiket) {
+                $tiket_items = TiketItems::with(['fasilitas'])->where('id_tiket', $tiket->id)->get();
+                $fasilitas_items = $tiket_items->map(function ($item) {
+                    return '<li>' . htmlspecialchars($item->fasilitas->nama) . '</li>';
+                })->implode('');
+
+                return '<ol>' . $fasilitas_items . '</ol>';
+            })
+            ->addColumn('harga_txt', function ($tiket) {
+                return 'Rp ' . number_format($tiket->total_harga);
+            })
             ->addColumn('action', function ($tiket) {
                 return  '<button class="btn btn-sm btn-danger " onclick="deleteTiket(' . $tiket->id . ')">Delete</button>';
             })
-            ->rawColumns(['created', 'action'])
+            ->rawColumns(['created', 'action', 'fasilitas_list', 'harga_txt'])
             ->make(true);
     }
     public function getPembayaranDataTable(Request $request)

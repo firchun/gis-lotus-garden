@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: 'times new roman';
-            font-size: 16px;
+            font-size: 12px;
         }
 
         .page_break {
@@ -60,6 +60,7 @@
                     <th>Dewasa</th>
                     <th>Anak-anak</th>
                     <th>Harga</th>
+                    <th>Booking</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -74,7 +75,17 @@
                         <td>{{ $item->no_hp }}</td>
                         <td>{{ $item->jumlah_dewasa }}</td>
                         <td>{{ $item->jumlah_anak }}</td>
-                        <td>{{ $item->total_harga }}</td>
+                        <td>Rp{{ number_format($item->total_harga) }}</td>
+                        <td>
+                            <ol style="padding-left:10px;font-size:10px;">
+                                @foreach (App\Models\TiketItems::with(['fasilitas'])->where('id_tiket', $item->id)->get() as $list)
+                                    <li>{{ $list->fasilitas->nama }}</li>
+                                @endforeach
+                            </ol>
+                            @if (App\Models\TiketItems::with(['fasilitas'])->where('id_tiket', $item->id)->count() == 0)
+                                -
+                            @endif
+                        </td>
                         <td>{{ $item->status }}</td>
                     </tr>
                 @endforeach

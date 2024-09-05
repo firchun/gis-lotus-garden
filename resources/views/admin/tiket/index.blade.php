@@ -1,5 +1,12 @@
 @extends('layouts.backend.admin')
-
+@push('css')
+    <style>
+        ol,
+        li {
+            list-style-type: desimal;
+        }
+    </style>
+@endpush
 @section('content')
     @include('layouts.backend.alert')
     <div class="dt-action-buttons text-end pt-3 pt-md-0 mb-4">
@@ -58,6 +65,7 @@
                                 <th>Dewasa</th>
                                 <th>Anak-anak</th>
                                 <th>Harga</th>
+                                <th>Booking</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -74,6 +82,7 @@
                                 <th>Dewasa</th>
                                 <th>Anak-anak</th>
                                 <th>Harga</th>
+                                <th>Booking</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>

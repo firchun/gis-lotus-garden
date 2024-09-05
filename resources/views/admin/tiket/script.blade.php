@@ -41,8 +41,13 @@
                         name: 'jumlah_anak'
                     },
                     {
-                        data: 'total_harga',
-                        name: 'total_harga'
+                        data: 'harga_txt',
+                        name: 'harga_txt'
+                    },
+
+                    {
+                        data: 'fasilitas_list',
+                        name: 'fasilitas_list'
                     },
                     {
                         data: 'status',
