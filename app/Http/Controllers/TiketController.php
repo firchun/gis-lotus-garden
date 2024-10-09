@@ -227,6 +227,8 @@ class TiketController extends Controller
     {
         $tiket = Tiket::find($id);
 
+        TiketItems::where('id_tiket', $id)->delete();
+
         if (!$tiket) {
             return response()->json(['message' => 'Tiket not found'], 404);
         }
