@@ -45,6 +45,7 @@
                     type: 'GET',
                     url: '/fasilitas/edit/' + id,
                     success: function(response) {
+                        $('#edit-id').val(response.id);
                         $('#edit-nama').val(response.nama);
                         $('#edit-keterangan').val(response.keterangan);
                         $('#edit-type').val(response.type);

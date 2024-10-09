@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fasilitas;
+use App\Models\Tiket;
+use App\Models\TiketItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -53,29 +55,44 @@ class FasilitasController extends Controller
             'harga' => $request->input('harga'),
             'slug' => Str::slug($request->input('nama')),
         ];
+
+        // Handle file upload if a new file is present
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fotoPath = $foto->store('public/foto');
             $fasilitasData['foto'] = 'foto/' . basename($fotoPath);
         }
+
+        // If updating an existing record
         if ($request->filled('id')) {
             $Fasilitas = Fasilitas::find($request->input('id'));
+
             if (!$Fasilitas) {
                 return response()->json(['message' => 'Fasilitas not found'], 404);
             }
 
+            // Only update 'foto' if a new file is uploaded
+            if (!$request->hasFile('foto')) {
+                $fasilitasData['foto'] = $Fasilitas->foto; // Retain the existing 'foto' value
+            }
+
             $Fasilitas->update($fasilitasData);
             $message = 'Fasilitas updated successfully';
-        } else {
+        }
+        // If creating a new record
+        else {
             Fasilitas::create($fasilitasData);
             $message = 'Fasilitas created successfully';
         }
 
         return response()->json(['message' => $message]);
     }
+
     public function destroy($id)
     {
         $fasilitas = Fasilitas::find($id);
+
+        TiketItems::where('id_fasilitas', $id)->delete();
 
         if (!$fasilitas) {
             return response()->json(['message' => 'Fasilitas not found'], 404);
