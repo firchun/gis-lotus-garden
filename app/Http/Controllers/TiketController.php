@@ -23,8 +23,9 @@ class TiketController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
-            'jumlah' => 'required|integer|min:1',
-            'total_harga' => 'required|integer',
+            'jumlah_dewasa' => 'required|integer',
+            'jumlah_anak' => 'nullable|integer',
+            'total_harga' => 'nullable|integer',
             'keterangan' => 'nullable|string',
             'tanggal' => 'required|date',
         ]);
@@ -50,8 +51,8 @@ class TiketController extends Controller
             $tiket->keterangan = $request->input('keterangan') ?: '-';
             $tiket->tanggal = $request->input('tanggal');
             $tiket->total_harga = $request->input('total_harga');;
-            $tiket->jumlah_dewasa = $request->input('jumlah_dewasa');
-            $tiket->jumlah_anak = $request->input('jumlah_anak');
+            $tiket->jumlah_dewasa = $request->input('jumlah_dewasa') ?? 0;
+            $tiket->jumlah_anak = $request->input('jumlah_anak') ?? 0;
             $tiket->barcode = $barcode;
             $tiket->save();
 

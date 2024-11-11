@@ -11,8 +11,12 @@
             <div class="row justify-content-center">
                 <div class="col-8">
                     <div class="mb-4 d-flex justify-content-end">
-                        <a href="{{ route('download-tiket', ['barcode' => $tiket->barcode]) }}"
-                            class="btn btn-sm btn-danger">Download ulang Tiket</a>
+                        <div class="mb-3">
+                            <a href="{{ route('download-tiket', ['barcode' => $tiket->barcode]) }}"
+                                class="btn btn-sm btn-danger">Download ulang Tiket</a><br>
+                            <small style="font-size: 10px;">Klik Download ulang jika tiket tidak otomatis
+                                terdownload</small>
+                        </div>
                     </div>
                     <img src="{{ url('barcode/' . $tiket->barcode . '.png') }}" alt="Barcode" style="width: 100%;">
                     <div class="mt-3">

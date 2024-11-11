@@ -15,28 +15,7 @@
                 </div>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
-                    {{-- <div class="select-role">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn active">
-                                <input type="radio" name="options" id="admin" />
-                                <div class="icon">
-                                    <img src="{{ asset('backend_theme') }}/vendors/images/briefcase.svg" class="svg"
-                                        alt="" />
-                                </div>
-                                <span>I'm</span>
-                                Manager
-                            </label>
-                            <label class="btn">
-                                <input type="radio" name="options" id="user" />
-                                <div class="icon">
-                                    <img src="{{ asset('backend_theme') }}/vendors/images/person.svg" class="svg"
-                                        alt="" />
-                                </div>
-                                <span>I'm</span>
-                                Employee
-                            </label>
-                        </div>
-                    </div> --}}
+
                     <div class="input-group custom">
                         <input type="email" class="form-control form-control-lg" placeholder="Email address"
                             name="email" required />

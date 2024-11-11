@@ -89,7 +89,7 @@ class PageController extends Controller
     {
         $fasilitas = Fasilitas::where('slug', $slug)->first();
         $data = [
-            'title' => $fasilitas->nama,
+            'title' => 'Fasilitas : ' . $fasilitas->nama,
             'fasilitas' => $fasilitas,
         ];
         return view('pages.detail-fasilitas', $data);

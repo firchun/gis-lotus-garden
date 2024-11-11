@@ -59,25 +59,53 @@
             const ctx = document.getElementById('tiketChart').getContext('2d');
 
             // Data dari controller
-            const weeks = @json($weeks);
+            const days = @json($days); // Ubah 'weeks' menjadi 'days'
             const totals = @json($totals);
 
             new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
-                    labels: weeks,
+                    labels: days, // Ubah 'weeks' menjadi 'days'
                     datasets: [{
                         label: 'Jumlah Tiket Terpakai',
                         data: totals,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        fill: true // Tidak mengisi area di bawah garis
                     }]
                 },
                 options: {
                     scales: {
                         y: {
                             beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: true
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    xMin: days.length - 1, // Mengatur pada titik terakhir
+                                    xMax: days.length - 1, // Mengatur pada titik terakhir
+                                    borderColor: 'red',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Waktu Sekarang',
+                                        enabled: true,
+                                        position: 'top'
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.4 // Mengatur kelengkungan garis untuk visualisasi lebih smooth
                         }
                     }
                 }

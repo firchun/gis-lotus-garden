@@ -30,33 +30,30 @@ class HomeController extends Controller
     {
         //chart
         // Mendapatkan tanggal saat ini dan 4 minggu sebelumnya
-        $endDate = Carbon::now();
-        $startDate = $endDate->copy()->subWeeks(4);
 
-        // Mengelompokkan tiket per minggu dengan tahun
+        $endDate = Carbon::now();
+        $startDate = $endDate->copy()->subMonth();
+
         $data = DB::table('tiket')
-            ->select(DB::raw('YEARWEEK(created_at, 1) as year_week, COUNT(*) as total'))
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->select(DB::raw("DATE(tanggal) as day, COUNT(*) as total"))
+            // ->whereBetween(DB::raw("DATE(tanggal)"), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->where('status', 'Terpakai')
-            ->groupBy(DB::raw('YEARWEEK(created_at, 1)'))
-            ->orderBy('year_week')
+            ->groupBy(DB::raw("DATE(tanggal)"))
+            ->orderBy('day')
             ->get();
 
         // Mengubah data untuk dikirim ke frontend
-        $weeks = [];
+        $days = [];
         $totals = [];
 
         foreach ($data as $item) {
-            $year = substr($item->year_week, 0, 4);
-            $weekNumber = intval(substr($item->year_week, 4));
-
-            // Format year_week menjadi Week X, YYYY
-            $weeks[] = 'Minggu ' . $weekNumber . ', ' . $year;
+            $days[] = $item->day;
             $totals[] = $item->total;
         }
+
         $data = [
             'title' => 'Dashboard',
-            'weeks' => $weeks,
+            'days' => $days,
             'totals' => $totals,
             'users' => User::count(),
             'tiket' => Tiket::count(),
